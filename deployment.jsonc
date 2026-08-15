@@ -1,22 +1,22 @@
 {
   // Cloudflare account that owns every Worker and provisioned resource.
   // Find it: https://developers.cloudflare.com/fundamentals/account/find-account-and-zone-ids/
-  "accountId": "<CLOUDFLARE_ACCOUNT_ID>",
+  "accountId": "02de46e18f6ea9e7c524815268dbbdb2",
 
   // Worker names are permanent service identities. Keep them unique within the account.
   // Reference: docs/customization.md#workers-and-routing
   "workers": {
     "workshop": {
-      "name": "<WORKSHOP_WORKER_NAME>",
+      "name": "lighthouse-workshop",
 
       // Production: use a hostname in an active Cloudflare zone. Wrangler creates DNS and TLS.
       // Evaluation: replace this with "route": { "workersDev": true }.
       // https://developers.cloudflare.com/workers/configuration/routing/custom-domains/
-      "route": { "customDomain": "os.example.com" }
+      "route": { "customDomain": "os.lighthouse-dexterous.com" }
     },
-    "context": { "name": "<CONTEXT_WORKER_NAME>" },
-    "customGatekeeper": { "name": "<CUSTOM_GATEKEEPER_WORKER_NAME>" },
-    "errorReporter": { "name": "<ERROR_REPORTER_WORKER_NAME>" }
+    "context": { "name": "lighthouse-context" },
+    "customGatekeeper": { "name": "lighthouse-gatekeeper" },
+    "errorReporter": { "name": "lighthouse-error-reporter" }
   },
 
   // This starter deploys Cloudflare Access mode. Cloudflare OS also supports built-in password
@@ -25,22 +25,22 @@
   // "admins" gates /admin in every sign-in method.
   // Reference: docs/customization.md#sign-in-methods
   "access": {
-    "issuer": "https://<TEAM_NAME>.cloudflareaccess.com",
-    "audience": "<ACCESS_AUDIENCE>",
-    "admins": ["<ADMIN_EMAIL>"]
+    "issuer": "https://aged-shape-e189.cloudflareaccess.com",
+    "audience": "82eea956d586e22af25ce090414373f111945ea7862e9dd5a0fbe1ac945388e7",
+    "admins": ["juan@dexteroustechnology.com"]
   },
 
   // Optional platform-funded model catalog. Leave disabled to deploy without AI setup.
   // When enabled, replace every placeholder and install CF_AI_GATEWAY_API_TOKEN separately.
   // Reference: docs/customization.md#ai-models
   "aiGateway": {
-    "enabled": false,
-    "name": "<AI_GATEWAY_NAME>",
-    "accountId": "<AI_GATEWAY_ACCOUNT_ID>",
-    "providers": ["anthropic", "openai", "google", "cloudflare"],
+    "enabled": true,
+    "name": "default",
+    "accountId": "02de46e18f6ea9e7c524815268dbbdb2",
+    "providers": ["cloudflare"],
 
     // "direct" sends Workers AI to its REST endpoint. "gateway" adds AI Gateway logs.
-    "workersAi": { "mode": "gateway", "gateway": "<WORKERS_AI_GATEWAY_NAME>" }
+    "workersAi": { "mode": "gateway", "gateway": "default" }
   },
 
   "context": {
@@ -63,8 +63,8 @@
   // Displayed to agents when the example custom integration is enabled in /admin.
   // Reference: docs/customization.md#custom-gatekeepers
   "customGatekeeper": {
-    "name": "<ORGANIZATION_DISPLAY_NAME>",
-    "message": "<ORGANIZATION_GUIDANCE>"
+    "name": "Dexterous Technology",
+    "message": "Internal Dexterous Technology integration. Ask before taking actions that affect production systems."
   },
 
   // Explicit backend issue reports go to a private Worker that emits structured console errors.
@@ -79,9 +79,9 @@
   // null values use Wrangler automatic provisioning. Set IDs/names to reuse owned resources.
   // https://developers.cloudflare.com/workers/wrangler/configuration/#automatic-provisioning
   "resources": {
-    "blueprintsKvNamespaceId": null,
-    "avatarsKvNamespaceId": null,
-    "blueprintContentBucket": null
+    "blueprintsKvNamespaceId": "a043d02640eb4fca96b5ff8ff5958884",
+    "avatarsKvNamespaceId": "82de481bee2444a6b19985168c766be2",
+    "blueprintContentBucket": "lighthouse-workshop-blueprint-content"
   },
 
   // Structured custom logs stay enabled. Invocation logs and traces are separate volume controls.
