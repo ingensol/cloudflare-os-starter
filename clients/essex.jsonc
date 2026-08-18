@@ -23,7 +23,7 @@
   // Access policy so they can sign in. "admins" gates /admin.
   "access": {
     "issuer": "https://aged-shape-e189.cloudflareaccess.com",
-    "audience": "<ESSEX_ACCESS_AUDIENCE>",
+    "audience": "3e13289f89dcc120e8a53495ae5fa388c8a41a7e9f68f12d56032d561aaab978",
     "admins": ["juan@dexteroustechnology.com"]
   },
 
@@ -58,9 +58,9 @@
   // All null: Wrangler provisions Essex its own KV namespaces and R2 bucket, isolated from
   // other deployments. Do not copy another deployment's resource IDs here.
   "resources": {
-    "blueprintsKvNamespaceId": null,
-    "avatarsKvNamespaceId": null,
-    "blueprintContentBucket": null
+    "blueprintsKvNamespaceId": "2d02559df1514e1a8eaf4eac68c94afe",
+    "avatarsKvNamespaceId": "77738bbeb1a5445a9c10edb6990fd57a",
+    "blueprintContentBucket": "essex-workshop-blueprint-content"
   },
 
   "observability": {
