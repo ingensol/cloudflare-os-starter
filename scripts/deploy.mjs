@@ -397,9 +397,21 @@ function build(config) {
   run(["--dir", "cloudflare-os", "--filter", "@gadgets/workshop-backend", "build"]);
 }
 
+// Which deployment config to read: `--config <path>` (relative to the current directory) selects a
+// per-client config such as clients/essex.jsonc; otherwise the repo's own deployment.jsonc.
+function deploymentConfigPath() {
+  const index = process.argv.indexOf("--config");
+  if (index === -1) return join(root, "deployment.jsonc");
+  const path = process.argv[index + 1];
+  if (!path || path.startsWith("--")) {
+    throw new Error("--config requires a file path, e.g. --config clients/essex.jsonc");
+  }
+  return resolve(path);
+}
+
 async function main() {
   requireSubmodule();
-  const config = await readDeployment(join(root, "deployment.jsonc"));
+  const config = await readDeployment(deploymentConfigPath());
   const generated = generateConfigs(config, {
     workshop: await readJsonc(join(root, "cloudflare-os/packages/workshop-backend/wrangler.jsonc")),
     context: await readJsonc(join(root, "cloudflare-os/packages/gatekeeper-context/wrangler.jsonc")),

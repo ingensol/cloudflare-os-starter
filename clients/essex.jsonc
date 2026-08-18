@@ -1,0 +1,72 @@
+{
+  // Client deployment: Essex County (pilot). Operated by Dexterous Technology.
+  // Deploy with: node scripts/deploy.mjs --config clients/essex.jsonc
+  // (validate first with: node scripts/deploy.mjs --check --config clients/essex.jsonc)
+
+  // Same Cloudflare account as the main deployment; Essex gets its own Workers + storage.
+  "accountId": "02de46e18f6ea9e7c524815268dbbdb2",
+
+  // Essex-scoped Worker names, unique within the account.
+  "workers": {
+    "workshop": {
+      "name": "essex-workshop",
+      "route": { "customDomain": "essex.lighthouse-dexterous.com" }
+    },
+    "context": { "name": "essex-context" },
+    "customGatekeeper": { "name": "essex-gatekeeper" },
+    "errorReporter": { "name": "essex-error-reporter" }
+  },
+
+  // Cloudflare Access mode. The issuer is the same Zero Trust team as the main deployment;
+  // Essex needs its OWN self-hosted Access application for essex.lighthouse-dexterous.com,
+  // whose audience (AUD) tag replaces the placeholder below. Add Essex testers to that app's
+  // Access policy so they can sign in. "admins" gates /admin.
+  "access": {
+    "issuer": "https://aged-shape-e189.cloudflareaccess.com",
+    "audience": "<ESSEX_ACCESS_AUDIENCE>",
+    "admins": ["juan@dexteroustechnology.com"]
+  },
+
+  // Reuse the Cloudflare Workers AI funded catalog (Kimi, GLM) — no per-user keys.
+  // Install the secret on this deployment separately:
+  //   pnpm exec wrangler secret put CF_AI_GATEWAY_API_TOKEN --name essex-workshop
+  "aiGateway": {
+    "enabled": true,
+    "name": "default",
+    "accountId": "02de46e18f6ea9e7c524815268dbbdb2",
+    "providers": ["cloudflare"],
+    "workersAi": { "mode": "gateway", "gateway": "default" }
+  },
+
+  "context": {
+    "sharingDomain": "production",
+    // null: Wrangler provisions a fresh KV namespace for Essex on first deploy.
+    "kvNamespaceId": null
+  },
+
+  "customGatekeeper": {
+    "name": "Essex County",
+    "message": "Essex County pilot deployment operated by Dexterous Technology. Ask before taking actions that affect production systems."
+  },
+
+  "errorReporting": {
+    "enabled": true,
+    "environment": "production",
+    "release": null
+  },
+
+  // All null: Wrangler provisions Essex its own KV namespaces and R2 bucket, isolated from
+  // other deployments. Do not copy another deployment's resource IDs here.
+  "resources": {
+    "blueprintsKvNamespaceId": null,
+    "avatarsKvNamespaceId": null,
+    "blueprintContentBucket": null
+  },
+
+  "observability": {
+    "enabled": true,
+    "headSamplingRate": 1,
+    "logs": { "invocationLogs": false },
+    "traces": { "enabled": false, "headSamplingRate": 0.1 }
+  }
+}
